@@ -1,0 +1,108 @@
+# Author: Jamie Strandboge <jamie@canonical.com>
+#include <tunables/global>
+
+/usr/bin/ubuntu-core-launcher (attach_disconnected) {
+    # We run privileged, so be fanatical about what we include and don't use
+    # any abstractions
+    /etc/ld.so.cache r,
+    /lib/@{multiarch}/ld-*.so mr,
+    # libc, you are funny
+    /lib/@{multiarch}/libc{,-[0-9]*}.so* mr,
+    /lib/@{multiarch}/libpthread{,-[0-9]*}.so* mr,
+    /lib/@{multiarch}/librt{,-[0-9]*}.so* mr,
+    /lib/@{multiarch}/libgcc_s.so* mr,
+    # normal libs in order
+    /lib/@{multiarch}/libapparmor.so* mr,
+    /lib/@{multiarch}/libudev.so* mr,
+    /usr/lib/@{multiarch}/libseccomp.so* mr,
+    /lib/@{multiarch}/libseccomp.so* mr,
+
+    /usr/bin/ubuntu-core-launcher r,
+
+    /dev/null rw,
+    /dev/full rw,
+    /dev/zero rw,
+
+    # cgroups
+    capability sys_admin,
+    capability dac_override,
+    /sys/fs/cgroup/devices/snap{,py}.*/ w,
+    /sys/fs/cgroup/devices/snap{,py}.*/tasks w,
+    /sys/fs/cgroup/devices/snap{,py}.*/devices.{allow,deny} w,
+
+    # querying udev
+    /etc/udev/udev.conf r,
+    /sys/devices/**/uevent r,
+    /lib/udev/snappy-app-dev ixr, # drop
+    /run/udev/** rw,
+    /{,usr/}bin/tr ixr,
+    /usr/lib/locale/** r,
+    /usr/lib/@{multiarch}/gconv/gconv-modules r,
+    /usr/lib/@{multiarch}/gconv/gconv-modules.cache r,
+
+    # priv dropping
+    capability setuid,
+    capability setgid,
+
+    # changing profile
+    @{PROC}/[0-9]*/attr/exec w,
+
+    # don't allow changing profile to unconfined or profiles that start with
+    # '/'
+    change_profile -> [^u/]**,
+    change_profile -> u[^n]**,
+    change_profile -> un[^c]**,
+    change_profile -> unc[^o]**,
+    change_profile -> unco[^n]**,
+    change_profile -> uncon[^f]**,
+    change_profile -> unconf[^i]**,
+    change_profile -> unconfi[^n]**,
+    change_profile -> unconfin[^e]**,
+    change_profile -> unconfine[^d]**,
+    change_profile -> unconfined?**,
+    # allow changing to a few not caught above
+    change_profile -> {u,un,unc,unco,uncon,unconf,unconfi,unconfin,unconfine},
+
+    # LP: #1446794 - when this bug is fixed, change the above to:
+    # deny change_profile -> {unconfined,/**},
+    # change_profile -> **,
+
+    # reading seccomp filters
+    /var/lib/snapd/seccomp/profiles/* r,
+
+    # set up snap-specific private /tmp dir
+    capability chown,
+    /tmp/ w,
+    /tmp/snap.*/ w,
+    /tmp/snap.*/tmp/ w,
+    mount options=(rw private) -> /tmp/,
+    mount options=(rw bind) /tmp/snap.*/tmp/ -> /tmp/,
+    mount fstype=devpts options=(rw) devpts -> /dev/pts/,
+    mount options=(rw bind) /dev/pts/ptmx -> /dev/ptmx,   # for bind mounting
+
+    # for running snaps on ubuntu
+    mount options=(rw rslave) -> /,
+    /snap/ r,
+    /snap/** r,
+    mount options=(rw bind) /snap/ubuntu-core/*/bin/ -> /bin/,
+    mount options=(rw bind) /snap/ubuntu-core/*/sbin/ -> /sbin/,
+    mount options=(rw bind) /snap/ubuntu-core/*/lib/ -> /lib/,
+    mount options=(rw bind) /snap/ubuntu-core/*/lib32/ -> /lib32/,
+    mount options=(rw bind) /snap/ubuntu-core/*/libx32/ -> /libx32/,
+    mount options=(rw bind) /snap/ubuntu-core/*/lib64/ -> /lib64/,
+    mount options=(rw bind) /snap/ubuntu-core/*/usr/ -> /usr/,
+
+    # for creating the user data directories: ~/snap, ~/snap/<name> and
+    # ~/snap/<name>/<version>
+    / r,
+    @{HOMEDIRS}/ r,
+    # These should both have 'owner' match but due to LP: #1466234, we can't
+    # yet
+    @{HOME}/ r,
+    @{HOME}/snap/{,*/,*/*/} rw,
+
+    # for creating the user shared memory directories
+    /{dev,run}/{,shm/} r,
+    # This should both have 'owner' match but due to LP: #1466234, we can't yet
+    /{dev,run}/shm/{,*/,*/*/} rw,
+}

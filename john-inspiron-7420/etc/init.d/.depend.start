@@ -1,0 +1,33 @@
+TARGETS = rsyslog cgmanager hostapd uuidd shadowsocks virtualbox killprocs apport dbus cgproxy cgroupfs-mount irqbalance nginx mysql thermald speech-dispatcher spamassassin vsftpd sddm apmd pptpd kerneloops single anacron rsync acpid ssh cron docker avahi-daemon bumblebeed openvpn cups-browsed cups saned plymouth grub-common rc.local ondemand
+INTERACTIVE = openvpn
+dbus: rsyslog
+cgproxy: cgmanager
+cgroupfs-mount: rsyslog
+irqbalance: rsyslog
+nginx: rsyslog
+mysql: rsyslog
+thermald: rsyslog
+speech-dispatcher: rsyslog
+spamassassin: rsyslog
+vsftpd: rsyslog
+sddm: rsyslog
+apmd: rsyslog
+pptpd: rsyslog
+kerneloops: rsyslog
+single: killprocs
+anacron: rsyslog
+rsync: rsyslog
+acpid: rsyslog
+ssh: rsyslog
+cron: rsyslog
+docker: rsyslog cgroupfs-mount
+avahi-daemon: dbus rsyslog
+bumblebeed: rsyslog
+openvpn: rsyslog
+cups-browsed: rsyslog
+cups: rsyslog
+saned: rsyslog dbus
+plymouth: openvpn rsyslog cups-browsed cgmanager dbus cgproxy docker cgroupfs-mount irqbalance hostapd nginx uuidd avahi-daemon shadowsocks mysql thermald speech-dispatcher spamassassin vsftpd bumblebeed sddm virtualbox apmd pptpd kerneloops cups saned apport anacron rsync acpid ssh cron
+grub-common: openvpn rsyslog cups-browsed cgmanager dbus cgproxy docker cgroupfs-mount irqbalance hostapd nginx uuidd avahi-daemon shadowsocks mysql thermald speech-dispatcher spamassassin vsftpd bumblebeed sddm virtualbox apmd pptpd kerneloops cups saned apport anacron rsync acpid ssh cron
+rc.local: openvpn rsyslog cups-browsed cgmanager dbus cgproxy docker cgroupfs-mount irqbalance hostapd nginx uuidd avahi-daemon shadowsocks mysql thermald speech-dispatcher spamassassin vsftpd bumblebeed sddm virtualbox apmd pptpd kerneloops cups saned apport anacron rsync acpid ssh cron
+ondemand: openvpn rsyslog cups-browsed cgmanager dbus cgproxy docker cgroupfs-mount irqbalance hostapd nginx uuidd avahi-daemon shadowsocks mysql thermald speech-dispatcher spamassassin vsftpd bumblebeed sddm virtualbox apmd pptpd kerneloops cups saned apport anacron rsync acpid ssh cron

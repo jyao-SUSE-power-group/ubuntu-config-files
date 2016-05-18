@@ -1,0 +1,2 @@
+# deb http://ppa.launchpad.net/numix/ppa/ubuntu xenial main # 已禁止升级到 xenial
+deb-src http://ppa.launchpad.net/numix/ppa/ubuntu wily main

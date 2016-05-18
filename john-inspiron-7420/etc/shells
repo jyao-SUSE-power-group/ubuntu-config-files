@@ -1,0 +1,10 @@
+# /etc/shells: valid login shells
+/bin/sh
+/bin/dash
+/bin/bash
+/bin/rbash
+/usr/bin/tmux
+/bin/zsh
+/usr/bin/zsh
+/usr/bin/screen
+/usr/bin/fish

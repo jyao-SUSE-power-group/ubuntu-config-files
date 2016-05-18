@@ -1,0 +1,1 @@
+# deb [arch=amd64] http://mirrors.aliyun.com/docker-engine/apt ubuntu-wily main # 已禁止升级到 xenial

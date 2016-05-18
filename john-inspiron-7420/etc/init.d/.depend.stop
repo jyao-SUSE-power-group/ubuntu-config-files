@@ -1,0 +1,12 @@
+TARGETS = bluetooth php5-fpm tor confluence unattended-upgrades whoopsie cgmanager hostapd uuidd shadowsocks virtualbox cgproxy irqbalance nginx alsa-utils mysql thermald speech-dispatcher spamassassin vsftpd sddm ufw apmd pptpd kerneloops docker bumblebeed openvpn resolvconf cups-browsed cups saned plymouth urandom cgroupfs-mount avahi-daemon sendsigs rsyslog umountnfs.sh hwclock.sh networking umountfs umountroot halt reboot
+cgroupfs-mount: docker
+avahi-daemon: cups-browsed saned
+sendsigs: openvpn cups-browsed bluetooth docker cgroupfs-mount irqbalance hostapd nginx uuidd avahi-daemon shadowsocks alsa-utils mysql php5-fpm thermald speech-dispatcher spamassassin tor confluence plymouth vsftpd bumblebeed sddm virtualbox unattended-upgrades
+rsyslog: openvpn cups-browsed bluetooth docker cgroupfs-mount irqbalance nginx avahi-daemon mysql thermald speech-dispatcher tor confluence sendsigs vsftpd bumblebeed sddm apmd pptpd kerneloops whoopsie cups saned
+umountnfs.sh: openvpn cups-browsed bluetooth docker cgroupfs-mount irqbalance hostapd nginx uuidd avahi-daemon shadowsocks alsa-utils mysql php5-fpm thermald speech-dispatcher sendsigs spamassassin tor confluence plymouth rsyslog vsftpd bumblebeed sddm virtualbox unattended-upgrades
+hwclock.sh: cups-browsed uuidd mysql tor rsyslog
+networking: openvpn cups-browsed nginx umountnfs.sh shadowsocks mysql php5-fpm tor vsftpd
+umountfs: openvpn urandom networking cups-browsed hwclock.sh bluetooth docker cgroupfs-mount irqbalance hostapd nginx uuidd umountnfs.sh avahi-daemon shadowsocks alsa-utils mysql php5-fpm thermald speech-dispatcher spamassassin tor confluence resolvconf plymouth vsftpd bumblebeed sddm virtualbox unattended-upgrades
+umountroot: umountfs
+halt: umountroot
+reboot: umountroot

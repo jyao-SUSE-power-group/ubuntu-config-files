@@ -1,0 +1,9 @@
+# written by pptpsetup
+pty "pptp 222.30.64.156 --nolaunchpppd"
+lock
+noauth
+nobsdcomp
+nodeflate
+name rpi2
+remotename provider
+ipparam provider
