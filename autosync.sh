@@ -37,12 +37,20 @@ for dir in $DIRS; do
         fi
          echo  当前备份    $dir 目录或文件
         rsync   -avzR  --progress  $dir   $BASE_NAME
-
     else
       echo  大于 20M 不予备份
     fi
-
   fi
 done
 
+#  Git  auto
+git push --set-upstream origin master
+git config --global push.default matching
+git branch --set-upstream-to=origin/master master
+
+git pull origin master
+git add --all
+git  commit -m "更新 $HOME_DIR 目录 $date "
+
+git push origin master
 #rsync   -avzr  --progress $DIRS   $BASE_NAME
