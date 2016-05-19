@@ -8,7 +8,7 @@
 
 BASE_NAME=$(uname --nodename)
 mkdir -p $BASE_NAME
-HOME_DIR=/home/$LOGNAME/
+HOME_DIR=/home/$LOGNAME
 DIRS="/etc  $(/bin/ls -AF $HOME_DIR | grep '^\.')"
 BLACK_LIST_DIRS=".ssh/ .bash_history  .zsh_history"
 echo " Don't use  root privileges ！ Now sync ： "  $DIRS
@@ -20,7 +20,7 @@ for dir in $DIRS; do
     #statements
     #  eval $(du -s   /home/john/.oh-my-zsh   | sort -nr | awk '{printf("var1=%s", $1)}')
     #  eval $(du -s   $HOME_DIR$dir   | sort -nr | awk '{printf("var1=%s", $1)}')
-    eval $(du -s   $HOME_DIR$dir   | sort -nr | awk '{printf("file_or_dir_size=%s", $1)}')
+    eval $(du -s   $HOME_DIR/$dir   | sort -nr | awk '{printf("file_or_dir_size=%s", $1)}')
     echo current file_or_dir_size is : $file_or_dir_size
   #let file_or_dir_size=$file_or_dir_size + 10
    file_or_dir_size_tmp=`expr $file_or_dir_size + 10`
@@ -32,7 +32,7 @@ for dir in $DIRS; do
           echo 目录存在
         else
             echo 目录不存在
-         dir=$HOME_DIR$dir
+         dir=$HOME_DIR/$dir
          echo    $dir
         fi
          echo  当前备份    $dir 目录或文件
